@@ -9,8 +9,7 @@ userForm.loginFormCallback = (data) => {
     if (response.success) {
       location.reload();
     } else {
-      const message = "Ошибка авторизации";
-      userForm.setLoginErrorMessage(message);
+      userForm.setLoginErrorMessage(response.error);
     }
   });
 };
@@ -22,8 +21,7 @@ userForm.registerFormCallback = (data) => {
     if (response.success) {
       location.reload();
     } else {
-      const message = "Ошибка регистрации";
-      userForm.setLoginErrorMessage(message);
+      userForm.setRegisterErrorMessage(response.error);
     }
   });
 };
