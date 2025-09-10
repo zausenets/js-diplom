@@ -36,7 +36,7 @@ moneyManager.addMoneyCallback = (data) => {
       ProfileWidget.showProfile(response.data);
       moneyManager.setMessage(true, "Баланс пополнен");
     } else {
-      moneyManager.setMessage(false, "Ошибка пополнения");
+      moneyManager.setMessage(false, response.error);
     }
   })
 };
@@ -47,7 +47,7 @@ moneyManager.conversionMoneyCallback = (data) => {
       ProfileWidget.showProfile(response.data);
       moneyManager.setMessage(true, "Конвертация выполнена успешно");
     } else {
-      moneyManager.setMessage(false, "Ошибка конвертации");
+      moneyManager.setMessage(false, response.error);
     }
   })
 };
@@ -58,7 +58,7 @@ moneyManager.sendMoneyCallback = (data) => {
       ProfileWidget.showProfile(response.data);
       moneyManager.setMessage(true, "Перевод совершен");
     } else {
-      moneyManager.setMessage(false, "Ошибка перевода");
+      moneyManager.setMessage(false, response.error);
     }
   })
 };
@@ -69,7 +69,7 @@ function requestFavorites() {
   ApiConnector.getFavorites((response) => {
     if (response.success) {
       favoritesWidget.clearTable();
-      favoritesWidget.fillTable();
+      favoritesWidget.fillTable(response.data);
       moneyManager.updateUsersList(response.data);
     }
   })
@@ -78,10 +78,12 @@ function requestFavorites() {
 favoritesWidget.addUserCallback = (data) => {
   ApiConnector.addUserToFavorites(data, (response) => {
     if (response.success) {
-      requestFavorites();
+      favoritesWidget.clearTable();
+      favoritesWidget.fillTable(response.data);
+      moneyManager.updateUsersList(response.data);
       favoritesWidget.setMessage(true, "Пользователь добавлен в избранное");
     } else {
-      favoritesWidget.setMessage(false, "Ошибка добавления в избранное");
+      favoritesWidget.setMessage(false, response.error);
     }
   })
 };
@@ -89,10 +91,12 @@ favoritesWidget.addUserCallback = (data) => {
 favoritesWidget.removeUserCallback = (id) => {
   ApiConnector.removeUserFromFavorites(id, (response) => {
     if (response.success) {
-      requestFavorites();
+      favoritesWidget.clearTable();
+      favoritesWidget.fillTable(response.data);
+      moneyManager.updateUsersList(response.data);
       favoritesWidget.setMessage(true, "Пользователь удален из избранного");
     } else {
-      favoritesWidget.setMessage(false, "Ошибка удаления из избранного");
+      favoritesWidget.setMessage(false, response.error);
     }
   })
 }
